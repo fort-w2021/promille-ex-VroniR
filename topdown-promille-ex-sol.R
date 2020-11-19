@@ -18,7 +18,7 @@ prepare_drinks <- function(drinks) {
   }
   
   # combine if the same drink is mentioned multiple times
-  drinks <- tapply(drinks, names(drinks), sum)    # tapply ok?
+  drinks <- tapply(drinks, names(drinks), sum)
   drinks
 }
 
@@ -77,7 +77,7 @@ tell_me_how_drunk <- function(age, sex = c("male", "female"), height, weight, dr
   assert_character(sex)
   assert_numeric(height, lower = 0, upper = 220, any.missing = FALSE)
   assert_numeric(weight, lower = 0, upper = 350, any.missing = FALSE)
-  assert_posixct(drinking_time)
+  assert_posixct(drinking_time, any.missing = FALSE, len = 2, sorted = TRUE)
   #assert(check_list(drinks), check_numeric(drinks), combine = "or")
   #assert_numeric(drinks, lower = 0, any.missing = FALSE)
   #assertNames(names(drinks), subset.of = possible_drinks)

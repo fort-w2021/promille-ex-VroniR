@@ -76,7 +76,7 @@ tell_me_how_drunk(
   drinks = c("schnaps" = 4)
 )
 
-tell_me_how_drunk(
+tell_me_how_drunk(    
   age = 24,
   sex = "f",
   height = 160,
@@ -122,3 +122,4 @@ tell_me_how_drunk(
   drinking_time = as.POSIXct(c("2016-10-03 14:00:00", "2016-10-03 21:00:00")),
   drinks = list("wein" = NULL)
 )
+
