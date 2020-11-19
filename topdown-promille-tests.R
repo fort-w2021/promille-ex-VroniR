@@ -12,7 +12,9 @@ test_that("basic implementation is correct", {
       drinking_time = as.POSIXct(c("2016-10-03 17:15:00", "2016-10-03 22:55:00")),
       drinks = c("massn" = 3, "schnaps" = 4)
     ),
-    2.359, tolerance = 0.01)
+    2.359,
+    tolerance = 0.01
+  )
   expect_equivalent(
     tell_me_how_drunk(
       age = 24,
@@ -22,7 +24,9 @@ test_that("basic implementation is correct", {
       drinking_time = as.POSIXct(c("2016-10-03 14:00:00", "2016-10-03 21:00:00")),
       drinks = list("hoibe" = 1, "schnaps" = 2)
     ),
-    0.40, tolerance = 0.01)
+    0.40,
+    tolerance = 0.01
+  )
   expect_equivalent(
     tell_me_how_drunk(
       age = 68,
@@ -32,7 +36,9 @@ test_that("basic implementation is correct", {
       drinking_time = as.POSIXct(c("2016-10-03 08:10:00", "2016-10-03 08:15:00")),
       drinks = c("schnaps" = 3)
     ),
-    0.687, tolerance = 0.01)
+    0.687,
+    tolerance = 0.01
+  )
   expect_equivalent(
     tell_me_how_drunk(
       age = 38,
@@ -42,7 +48,8 @@ test_that("basic implementation is correct", {
       drinking_time = as.POSIXct(c("2016-10-03 18:00:00", "2016-10-03 22:00:00")),
       drinks = c("hoibe" = 1)
     ),
-    0)
+    0
+  )
 })
 
 # use input homogenization and match.arg for this:
@@ -53,7 +60,7 @@ test_that("interface for sex is implemented flexibly", {
       sex = "male",
       height = 190,
       weight = 134,
-        drinking_time = as.POSIXct(c("2016-10-03 18:00:00", "2016-10-03 22:00:00")),
+      drinking_time = as.POSIXct(c("2016-10-03 18:00:00", "2016-10-03 22:00:00")),
       drinks = c("hoibe" = 5)
     ),
     tell_me_how_drunk(
@@ -63,7 +70,8 @@ test_that("interface for sex is implemented flexibly", {
       weight = 134,
       drinking_time = as.POSIXct(c("2016-10-03 18:00:00", "2016-10-03 22:00:00")),
       drinks = c("hoibe" = 5)
-    ))
+    )
+  )
   expect_equal(
     tell_me_how_drunk(
       age = 38,
@@ -80,7 +88,8 @@ test_that("interface for sex is implemented flexibly", {
       weight = 134,
       drinking_time = as.POSIXct(c("2016-10-03 18:00:00", "2016-10-03 22:00:00")),
       drinks = c("hoibe" = 5)
-    ))
+    )
+  )
 })
 
 test_that("interface for drinks is implemented flexibly", {
@@ -100,7 +109,8 @@ test_that("interface for drinks is implemented flexibly", {
       weight = 134,
       drinking_time = as.POSIXct(c("2016-10-03 18:00:00", "2016-10-03 22:00:00")),
       drinks = c("schnaps" = 2, "hoibe" = 1)
-    ))
+    )
+  )
   # think about how to achieve this as simply as possible:
   expect_equal(
     tell_me_how_drunk(
@@ -118,7 +128,8 @@ test_that("interface for drinks is implemented flexibly", {
       weight = 134,
       drinking_time = as.POSIXct(c("2016-10-03 18:00:00", "2016-10-03 22:00:00")),
       drinks = c("schnaps" = 3, "hoibe" = 1)
-    ))
+    )
+  )
 })
 
 # anything under age < 16 not ok, hard liquor under age 18 not ok.
@@ -130,7 +141,8 @@ test_that("legal drinking age is checked", {
       height = 160,
       weight = 50,
       drinking_time = as.POSIXct(c("2016-10-03 18:00:00", "2016-10-03 22:00:00")),
-      drinks = c("hoibe" = 7)),
+      drinks = c("hoibe" = 7)
+    ),
     regexp = "illegal"
   )
   expect_warning(
@@ -140,7 +152,8 @@ test_that("legal drinking age is checked", {
       height = 160,
       weight = 50,
       drinking_time = as.POSIXct(c("2016-10-03 18:00:00", "2016-10-03 22:00:00")),
-      drinks = c("schnaps" = 7)),
+      drinks = c("schnaps" = 7)
+    ),
     regexp = "illegal"
   )
   expect_silent(
@@ -150,7 +163,7 @@ test_that("legal drinking age is checked", {
       height = 160,
       weight = 50,
       drinking_time = as.POSIXct(c("2016-10-03 18:00:00", "2016-10-03 22:00:00")),
-      drinks = c("massn" = 2))
+      drinks = c("massn" = 2)
     )
+  )
 })
-

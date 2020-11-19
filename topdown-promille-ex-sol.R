@@ -1,28 +1,30 @@
+ibrary(checkmate)
 
 # all drinks should be a homogeneous format
 prepare_drinks <- function(drinks) {
-  #assert(check_list(drinks), check_numeric(drinks), combine = "or")    # not necessary, asserted again after unlist()
-  
+  # assert(check_list(drinks), check_numeric(drinks), combine = "or")    # not necessary, asserted again after unlist()
+
   # unlist lists or vectors to get the same format
   drinks <- unlist(drinks)
   assert_numeric(drinks, lower = 0, any.missing = FALSE)
-  
+
   possible_drinks <- c("hoibe", "massn", "schnaps", "wein")
   assertNames(names(drinks), subset.of = possible_drinks)
-  
+
   # extend drinks with all possible drinks
   for (d in possible_drinks) {
     if (is.na(drinks[d])) {
       drinks[[d]] <- 0
     }
   }
-  
+
   # combine if the same drink is mentioned multiple times
   drinks <- tapply(drinks, names(drinks), sum)
   drinks
 }
 
 
+# check if the person is legally allowed to drink
 check_drinking_age <- function(age, drinks) {
   if (age < 16 & any(drinks > 0)) {
     warning("Don't drink when you're younger than 16, that's illegal!")
@@ -33,10 +35,11 @@ check_drinking_age <- function(age, drinks) {
 }
 
 
+
 # calculate the alcohol intake for drinks
 get_alcohol_consumed <- function(drinks) {
   drinks <- prepare_drinks(drinks = drinks)
-  
+
   alcohol_consumed <- 0.8 * (
     drinks[["massn"]] * 1000 * 0.06 +
       drinks[["hoibe"]] * 500 * 0.06 +
@@ -46,7 +49,7 @@ get_alcohol_consumed <- function(drinks) {
 }
 
 
-
+# calculate "Gesamtkörperwasser" depending on sex
 get_gkw_sex <- function(age, sex = c("male", "female"), height, weight) {
   sex <- tolower(sex)
   sex <- match.arg(sex)
@@ -61,7 +64,7 @@ get_gkw_sex <- function(age, sex = c("male", "female"), height, weight) {
 }
 
 
-
+# calculate alcohol concentration in the blood before reduction begins
 get_blood_alcohol_concentration <- function(age, sex, height, weight, drinks) {
   alcohol_consumed <- get_alcohol_consumed(drinks = drinks)
   gkw_sex <- get_gkw_sex(age = age, sex = sex, height = height, weight = weight)
@@ -72,24 +75,26 @@ get_blood_alcohol_concentration <- function(age, sex, height, weight, drinks) {
 
 
 library(checkmate)
-tell_me_how_drunk <- function(age, sex = c("male", "female"), height, weight, drinking_time, drinks) {
+
+# calculate alcohol concentration in the blood at the end of the drinking time
+tell_me_how_drunk <- function(age, sex = c("male", "female"), height,
+                              weight, drinking_time, drinks) {
   assert_numeric(age, lower = 0, upper = 120, any.missing = FALSE)
   assert_character(sex)
   assert_numeric(height, lower = 0, upper = 220, any.missing = FALSE)
   assert_numeric(weight, lower = 0, upper = 350, any.missing = FALSE)
   assert_posixct(drinking_time, any.missing = FALSE, len = 2, sorted = TRUE)
-  #assert(check_list(drinks), check_numeric(drinks), combine = "or")
-  #assert_numeric(drinks, lower = 0, any.missing = FALSE)
-  #assertNames(names(drinks), subset.of = possible_drinks)
+
   drinks <- prepare_drinks(drinks = drinks)
   check_drinking_age(age = age, drinks = drinks)
-  
-  blood_alcohol_concentration <- get_blood_alcohol_concentration(age = age, sex = sex, height = height, weight = weight, drinks = drinks)
-  concentration_final <- blood_alcohol_concentration - 
-    max(0, ((as.numeric(difftime(drinking_time[2], 
-                                 drinking_time[1], units = "hours")) - 1) * 0.15))
+
+  blood_alcohol_concentration <- get_blood_alcohol_concentration(
+    age = age, sex = sex, height = height, weight = weight, drinks = drinks
+  )
+  concentration_final <- blood_alcohol_concentration -
+    max(0, ((as.numeric(difftime(drinking_time[[2]], drinking_time[[1]],
+      units = "hours"
+    )) - 1) * 0.15))
   concentration_final <- max(0, concentration_final)
   concentration_final
 }
-
-
