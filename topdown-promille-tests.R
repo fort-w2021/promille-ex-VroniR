@@ -153,3 +153,4 @@ test_that("legal drinking age is checked", {
       drinks = c("massn" = 2))
     )
 })
+
